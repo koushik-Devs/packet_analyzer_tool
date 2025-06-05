@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packet Analyzer Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Packet Sniffer</h1>
+        <button onclick="sniffPackets()">Start Sniffing</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function sniffPackets() {
+            fetch('/sniff')
+                .then(res => res.json())
+                .then(data => {
+                    let html = '<table><tr><th>Time</th><th>Source</th><th>Destination</th><th>Protocol</th><th>Payload</th></tr>';
+                    data.forEach(pkt => {
+                        html += `<tr><td>${pkt.timestamp}</td><td>${pkt.src}</td><td>${pkt.dst}</td><td>${pkt.proto}</td><td>${pkt.payload}</td></tr>`;
+                    });
+                    html += '</table>';
+                    document.getElementById('result').innerHTML = html;
+                });
+        }
+    </script>
+</body>
+</html>
